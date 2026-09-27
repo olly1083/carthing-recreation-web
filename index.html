@@ -1541,7 +1541,15 @@ setInterval(
     updateStatus,
     2000
 );
-
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+        .catch(error => {
+            console.error(
+                "Service worker failed:",
+                error
+            );
+        });
+}
 </script>
 
 </body>
