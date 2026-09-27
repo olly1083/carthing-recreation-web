@@ -1,0 +1,3014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080808">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>CarThing</title>
+
+<style>
+:root {
+    --bg: #080808;
+    --panel: #111;
+    --panel2: #181818;
+    --panel3: #202020;
+    --text: #f4f4f4;
+    --muted: #9b9b9b;
+    --green: #1ed760;
+    --green2: #1db954;
+    --danger: #ff5c5c;
+    --border: #292929;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+button {
+    color: inherit;
+    border: 0;
+}
+
+.app {
+    width: 100vw;
+    height: 100vh;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at 20% 40%, #171717 0, transparent 35%),
+        #080808;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar {
+    height: 58px;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,8,.96);
+    z-index: 10;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -.5px;
+    padding: 0 8px;
+}
+
+.logo span {
+    color: var(--green);
+}
+
+.connection {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #777;
+    flex: none;
+}
+
+.status-dot.connected {
+    background: var(--green);
+    box-shadow: 0 0 10px rgba(30,215,96,.65);
+}
+
+.status-dot.error {
+    background: var(--danger);
+}
+
+.status-text {
+    color: var(--muted);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-button {
+    height: 40px;
+    min-width: 40px;
+    padding: 0 13px;
+    border-radius: 10px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.top-button:active {
+    transform: scale(.96);
+}
+
+.connect-button {
+    background: var(--green);
+    color: #000;
+    font-weight: 800;
+    border: 0;
+}
+
+/* =========================================================
+   PLAYER
+   ========================================================= */
+
+.player {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(180px, 33vw) minmax(330px, 1fr) 160px;
+    gap: clamp(12px, 2vw, 28px);
+    padding: clamp(12px, 2vw, 26px);
+}
+
+/* Artwork */
+
+.art-column {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.artwork {
+    width: min(31vw, 330px);
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 30% 25%, #555, transparent 20%),
+        radial-gradient(circle at 70% 75%, #222, transparent 35%),
+        linear-gradient(135deg, #292929, #080808);
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.65),
+        0 0 0 1px rgba(255,255,255,.04);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.artwork.has-image img {
+    display: block;
+}
+
+.demo-art {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    background:
+        linear-gradient(
+            135deg,
+            #2d2d2d 0%,
+            #111 45%,
+            #050505 100%
+        );
+}
+
+.artwork.has-image .demo-art {
+    display: none;
+}
+
+.demo-disc {
+    position: absolute;
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    right: -12%;
+    top: 7%;
+    background:
+        repeating-radial-gradient(
+            circle,
+            #171717 0,
+            #171717 3px,
+            #0b0b0b 4px,
+            #0b0b0b 8px
+        );
+    box-shadow: 0 0 40px rgba(0,0,0,.7);
+}
+
+.demo-label {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 900;
+    line-height: .95;
+    letter-spacing: -2px;
+}
+
+/* Center */
+
+.controls-column {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.track-info {
+    min-width: 0;
+    margin-bottom: clamp(10px, 2vh, 22px);
+}
+
+.track-title {
+    font-size: clamp(23px, 3vw, 42px);
+    line-height: 1.05;
+    font-weight: 850;
+    letter-spacing: -.8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-artist {
+    margin-top: 7px;
+    font-size: clamp(15px, 1.7vw, 22px);
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-area {
+    width: 100%;
+}
+
+.progress-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #aaa;
+    font-size: 12px;
+}
+
+.progress {
+    flex: 1;
+    height: 9px;
+    border-radius: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #3b3b3b;
+    cursor: pointer;
+}
+
+.progress::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 6px #000;
+}
+
+.progress::-moz-range-thumb {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+}
+
+.progress::-webkit-slider-runnable-track {
+    height: 9px;
+    border-radius: 20px;
+}
+
+.secondary-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(7px, 1vw, 14px);
+    margin-top: clamp(10px, 2vh, 18px);
+}
+
+.icon-button {
+    width: clamp(43px, 5vw, 58px);
+    height: clamp(43px, 5vw, 58px);
+    border-radius: 50%;
+    background: transparent;
+    color: #aaa;
+    font-size: clamp(18px, 2vw, 25px);
+    cursor: pointer;
+}
+
+.icon-button.active {
+    color: var(--green);
+}
+
+.icon-button:active {
+    transform: scale(.91);
+    background: #222;
+}
+
+.main-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(10px, 2vw, 24px);
+    margin-top: clamp(7px, 1.4vh, 15px);
+}
+
+.playback-button {
+    width: clamp(54px, 6vw, 76px);
+    height: clamp(54px, 6vw, 76px);
+    border-radius: 50%;
+    background: #242424;
+    border: 1px solid #303030;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 2.6vw, 32px);
+    cursor: pointer;
+}
+
+.playback-button:active {
+    transform: scale(.91);
+    background: #333;
+}
+
+.play-button {
+    width: clamp(70px, 7.5vw, 92px);
+    height: clamp(70px, 7.5vw, 92px);
+    background: #fff;
+    color: #000;
+    font-size: clamp(28px, 3vw, 40px);
+}
+
+.play-button:active {
+    background: #ddd;
+}
+
+/* =========================================================
+   ROTARY VOLUME CONTROL
+   ========================================================= */
+
+.volume-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+.volume-wheel {
+    width: min(140px, 15vw);
+    height: min(140px, 15vw);
+    min-width: 110px;
+    min-height: 110px;
+    border-radius: 50%;
+    position: relative;
+    touch-action: none;
+    cursor: ns-resize;
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #303030 0,
+            #202020 38%,
+            #111 40%,
+            #111 70%,
+            #252525 72%,
+            #101010 100%
+        );
+    box-shadow:
+        inset 0 2px 7px rgba(255,255,255,.07),
+        inset 0 -7px 12px rgba(0,0,0,.7),
+        0 10px 25px rgba(0,0,0,.5);
+    border: 2px solid #2b2b2b;
+}
+
+.volume-wheel::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border-radius: 50%;
+    border: 1px solid #3a3a3a;
+}
+
+.volume-indicator {
+    position: absolute;
+    width: 4px;
+    height: 23%;
+    background: var(--green);
+    border-radius: 5px;
+    left: calc(50% - 2px);
+    top: 9%;
+    transform-origin: 50% 180%;
+    box-shadow: 0 0 8px rgba(30,215,96,.4);
+}
+
+.volume-number {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.volume-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: -32px;
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* =========================================================
+   SIDE DRAWERS
+   ========================================================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+    z-index: 30;
+}
+
+.overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.drawer {
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(480px, 92vw);
+    background: #111;
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.drawer-title {
+    font-size: 20px;
+    font-weight: 850;
+}
+
+.close-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #222;
+    font-size: 20px;
+}
+
+.drawer-content {
+    flex: 1;
+    overflow: auto;
+    padding: 14px;
+}
+
+.queue-item,
+.device-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    min-height: 64px;
+    border-radius: 12px;
+    margin-bottom: 7px;
+    background: #191919;
+    border: 1px solid transparent;
+}
+
+.queue-item.current,
+.device-item.current {
+    border-color: #2d6d45;
+    background: #172019;
+}
+
+.queue-art {
+    width: 48px;
+    height: 48px;
+    flex: none;
+    border-radius: 6px;
+    object-fit: cover;
+    background: #292929;
+}
+
+.queue-info,
+.device-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.queue-title,
+.device-name {
+    font-weight: 750;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.queue-artist,
+.device-type {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.queue-play {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #292929;
+}
+
+.device-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #242424;
+    font-size: 20px;
+}
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-label {
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 9px;
+}
+
+.input {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 13px;
+    background: #1d1d1d;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 10px;
+    outline: none;
+}
+
+.input:focus {
+    border-color: var(--green);
+}
+
+.big-action {
+    width: 100%;
+    min-height: 54px;
+    border-radius: 12px;
+    background: var(--green);
+    color: #000;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.big-action.secondary {
+    background: #242424;
+    color: #fff;
+}
+
+.warning {
+    padding: 12px;
+    border-radius: 10px;
+    background: #2a2014;
+    color: #e9c58e;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.success {
+    padding: 12px;
+    border-radius: 10px;
+    background: #142519;
+    color: #8be5a7;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    bottom: 20px;
+    transform: translate(-50%, 120px);
+    max-width: min(90vw, 600px);
+    padding: 13px 17px;
+    border-radius: 12px;
+    background: #252525;
+    border: 1px solid #383838;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    font-size: 14px;
+    transition: transform .25s ease;
+}
+
+.toast.visible {
+    transform: translate(-50%, 0);
+}
+
+/* =========================================================
+   EMPTY / DEMO
+   ========================================================= */
+
+.demo-badge {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    z-index: 4;
+    padding: 5px 8px;
+    border-radius: 7px;
+    background: rgba(0,0,0,.65);
+    color: #ccc;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+body.connected .demo-badge {
+    display: none;
+}
+
+/* =========================================================
+   SMALL LANDSCAPE
+   ========================================================= */
+
+@media (max-height: 500px) {
+    .topbar {
+        height: 48px;
+        min-height: 48px;
+    }
+
+    .player {
+        padding: 10px 14px;
+        gap: 14px;
+    }
+
+    .artwork {
+        width: min(30vw, 250px);
+    }
+
+    .track-info {
+        margin-bottom: 7px;
+    }
+
+    .track-artist {
+        margin-top: 3px;
+    }
+
+    .secondary-controls {
+        margin-top: 5px;
+    }
+
+    .main-controls {
+        margin-top: 3px;
+    }
+
+    .volume-wheel {
+        min-width: 95px;
+        min-height: 95px;
+        width: 115px;
+        height: 115px;
+    }
+
+    .volume-label {
+        bottom: -25px;
+    }
+}
+
+/* =========================================================
+   PORTRAIT FALLBACK
+   ========================================================= */
+
+@media (orientation: portrait) {
+    .app::before {
+        content: "Landscape mode recommended";
+        position: fixed;
+        z-index: 200;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 7px;
+        text-align: center;
+        font-size: 11px;
+        background: #171717;
+        color: #aaa;
+        pointer-events: none;
+    }
+
+    .player {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr auto;
+    }
+
+    .art-column {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .controls-column {
+        grid-row: 1;
+        grid-column: 2;
+    }
+
+    .volume-column {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="topbar">
+        <div class="logo">CAR<span>THING</span></div>
+
+        <div class="connection">
+            <div id="statusDot" class="status-dot"></div>
+            <div id="statusText" class="status-text">
+                Demo mode
+            </div>
+        </div>
+
+        <button class="top-button"
+                id="deviceButton"
+                title="Spotify devices"
+                aria-label="Spotify devices">
+            ▣
+        </button>
+
+        <button class="top-button"
+                id="queueButton"
+                title="Queue"
+                aria-label="Queue">
+            ☷
+        </button>
+
+        <button class="top-button connect-button"
+                id="settingsButton">
+            Connect
+        </button>
+    </header>
+
+    <main class="player">
+
+        <!-- ALBUM ART -->
+        <section class="art-column">
+            <div id="artwork" class="artwork">
+
+                <div class="demo-badge">DEMO</div>
+
+                <img id="albumArt"
+                     alt="Album artwork">
+
+                <div class="demo-art">
+                    <div class="demo-disc"></div>
+                    <div class="demo-label">
+                        CAR<br>
+                        THING
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLAYER CONTROLS -->
+        <section class="controls-column">
+
+            <div class="track-info">
+                <div id="trackTitle" class="track-title">
+                    Midnight Drive
+                </div>
+
+                <div id="trackArtist" class="track-artist">
+                    Demo Artist
+                </div>
+            </div>
+
+            <div class="progress-area">
+                <div class="progress-row">
+                    <span id="currentTime">0:00</span>
+
+                    <input id="progress"
+                           class="progress"
+                           type="range"
+                           min="0"
+                           max="100"
+                           value="0"
+                           step="1">
+
+                    <span id="duration">3:42</span>
+                </div>
+            </div>
+
+            <div class="secondary-controls">
+
+                <button id="shuffleButton"
+                        class="icon-button"
+                        title="Shuffle">
+                    ⤨
+                </button>
+
+                <button id="likeButton"
+                        class="icon-button"
+                        title="Like / Save">
+                    ♡
+                </button>
+
+                <button id="repeatButton"
+                        class="icon-button"
+                        title="Repeat">
+                    ↻
+                </button>
+
+            </div>
+
+            <div class="main-controls">
+
+                <button id="previousButton"
+                        class="playback-button"
+                        aria-label="Previous">
+                    ⏮
+                </button>
+
+                <button id="playButton"
+                        class="playback-button play-button"
+                        aria-label="Play or pause">
+                    ▶
+                </button>
+
+                <button id="nextButton"
+                        class="playback-button"
+                        aria-label="Next">
+                    ⏭
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- VOLUME WHEEL -->
+        <section class="volume-column">
+
+            <div id="volumeWheel"
+                 class="volume-wheel"
+                 title="Drag up/down to change volume">
+
+                <div id="volumeIndicator"
+                     class="volume-indicator"></div>
+
+                <div id="volumeNumber"
+                     class="volume-number">
+                    50
+                </div>
+
+                <div class="volume-label">
+                    VOLUME
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" class="overlay"></div>
+
+<!-- QUEUE DRAWER -->
+<aside id="queueDrawer" class="drawer">
+
+    <div class="drawer-header">
+        <div class="drawer-title">Queue</div>
+
+        <button class="close-button"
+                data-close="queue">
+            ×
+        </button>
+    </div>
+
+    <div id="queueContent" class="drawer-content">
+        <div class="warning">
+            Sign into Spotify to view your real queue.
+        </div>
+    </div>
+
+</aside>
+
+<!-- DEVICES DRAWER -->
+<aside id="deviceDrawer" class="drawer">
+
+    <div class="drawer-header">
+        <div class="drawer-title">Spotify devices</div>
+
+        <button class="close-button"
+                data-close="devices">
+            ×
+        </button>
+    </div>
+
+    <div id="deviceContent" class="drawer-content">
+        <div class="warning">
+            Connect Spotify to see available devices.
+        </div>
+    </div>
+
+</aside>
+
+<!-- SETTINGS DRAWER -->
+<aside id="settingsDrawer" class="drawer">
+
+    <div class="drawer-header">
+        <div class="drawer-title">Settings</div>
+
+        <button class="close-button"
+                data-close="settings">
+            ×
+        </button>
+    </div>
+
+    <div class="drawer-content">
+
+        <div class="settings-section">
+
+            <div class="settings-label">
+                Spotify Client ID
+            </div>
+
+            <input id="clientIdInput"
+                   class="input"
+                   type="text"
+                   placeholder="Paste your Spotify Client ID">
+
+        </div>
+
+        <div class="settings-section">
+
+            <div class="settings-label">
+                Redirect URI
+            </div>
+
+            <input id="redirectInput"
+                   class="input"
+                   type="text"
+                   readonly>
+
+        </div>
+
+        <div class="settings-section">
+
+            <button id="saveClientButton"
+                    class="big-action">
+                Save Client ID
+            </button>
+
+        </div>
+
+        <div class="settings-section">
+
+            <button id="loginButton"
+                    class="big-action">
+                Sign in with Spotify
+            </button>
+
+        </div>
+
+        <div class="settings-section">
+
+            <button id="logoutButton"
+                    class="big-action secondary">
+                Sign out
+            </button>
+
+        </div>
+
+        <div class="settings-section">
+
+            <div class="warning">
+                This app uses Spotify Authorization Code + PKCE.
+                No Spotify client secret belongs in this page.
+            </div>
+
+        </div>
+
+        <div class="settings-section">
+
+            <div class="success">
+                Spotify playback remains on your selected Spotify
+                Connect device. This page is only the remote control.
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURATION
+   =========================================================
+
+   IMPORTANT:
+
+   Put your Spotify CLIENT ID here if you want to ship this
+   as a dedicated app.
+
+   NEVER put your Spotify CLIENT SECRET here.
+
+   You can also enter the Client ID from the Settings screen.
+========================================================= */
+
+const CONFIG = {
+    clientId:
+        localStorage.getItem("carthing_client_id") || "",
+
+    /*
+       IMPORTANT:
+       This must be the exact URL where this file is hosted.
+
+       Example:
+       https://yourusername.github.io/carthing.html
+
+       Spotify requires HTTPS for normal redirect URIs.
+       http://127.0.0.1 is permitted for local development.
+    */
+    redirectUri:
+        window.location.origin + window.location.pathname,
+
+    scopes: [
+        "user-read-playback-state",
+        "user-modify-playback-state",
+        "user-read-currently-playing",
+        "user-library-read",
+        "user-library-modify"
+    ].join(" ")
+};
+
+const API = "https://api.spotify.com/v1";
+const ACCOUNTS = "https://accounts.spotify.com";
+
+let accessToken =
+    localStorage.getItem("carthing_access_token") || "";
+
+let refreshToken =
+    localStorage.getItem("carthing_refresh_token") || "";
+
+let tokenExpiresAt =
+    Number(localStorage.getItem("carthing_token_expires")) || 0;
+
+let selectedDeviceId =
+    localStorage.getItem("carthing_device_id") || "";
+
+let playback = null;
+let devices = [];
+let queue = [];
+
+let demo = true;
+let demoPlaying = false;
+let demoPosition = 0;
+let demoDuration = 222;
+
+let progressDragging = false;
+let volume = 50;
+
+let repeatMode = "off";
+let shuffle = false;
+
+let volumeDragging = false;
+let volumeStartY = 0;
+let volumeStartValue = 50;
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const statusDot = $("statusDot");
+const statusText = $("statusText");
+
+const trackTitle = $("trackTitle");
+const trackArtist = $("trackArtist");
+
+const albumArt = $("albumArt");
+const artwork = $("artwork");
+
+const currentTime = $("currentTime");
+const duration = $("duration");
+const progress = $("progress");
+
+const playButton = $("playButton");
+const previousButton = $("previousButton");
+const nextButton = $("nextButton");
+
+const shuffleButton = $("shuffleButton");
+const likeButton = $("likeButton");
+const repeatButton = $("repeatButton");
+
+const volumeWheel = $("volumeWheel");
+const volumeIndicator = $("volumeIndicator");
+const volumeNumber = $("volumeNumber");
+
+const overlay = $("overlay");
+
+const queueDrawer = $("queueDrawer");
+const deviceDrawer = $("deviceDrawer");
+const settingsDrawer = $("settingsDrawer");
+
+const queueContent = $("queueContent");
+const deviceContent = $("deviceContent");
+
+const clientIdInput = $("clientIdInput");
+const redirectInput = $("redirectInput");
+
+const toast = $("toast");
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("visible");
+
+    clearTimeout(showToast.timer);
+
+    showToast.timer = setTimeout(() => {
+        toast.classList.remove("visible");
+    }, 3000);
+}
+
+function setStatus(message, state = "") {
+    statusText.textContent = message;
+
+    statusDot.classList.remove(
+        "connected",
+        "error"
+    );
+
+    if (state) {
+        statusDot.classList.add(state);
+    }
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function formatTime(ms) {
+    ms = Math.max(0, Math.floor(ms || 0));
+
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    return `${minutes}:${String(secs).padStart(2, "0")}`;
+}
+
+/* =========================================================
+   DRAWERS
+========================================================= */
+
+function closeDrawers() {
+    queueDrawer.classList.remove("open");
+    deviceDrawer.classList.remove("open");
+    settingsDrawer.classList.remove("open");
+    overlay.classList.remove("visible");
+}
+
+function openDrawer(drawer) {
+    closeDrawers();
+
+    drawer.classList.add("open");
+    overlay.classList.add("visible");
+}
+
+$("queueButton").addEventListener("click", async () => {
+    openDrawer(queueDrawer);
+
+    if (!demo) {
+        await loadQueue();
+    }
+});
+
+$("deviceButton").addEventListener("click", async () => {
+    openDrawer(deviceDrawer);
+
+    if (!demo) {
+        await loadDevices();
+    }
+});
+
+$("settingsButton").addEventListener("click", () => {
+    openDrawer(settingsDrawer);
+});
+
+overlay.addEventListener("click", closeDrawers);
+
+document.querySelectorAll("[data-close]").forEach(button => {
+    button.addEventListener("click", closeDrawers);
+});
+
+/* =========================================================
+   PKCE
+========================================================= */
+
+function randomString(length = 64) {
+    const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+
+    const bytes = crypto.getRandomValues(
+        new Uint8Array(length)
+    );
+
+    return Array.from(bytes)
+        .map(byte => chars[byte % chars.length])
+        .join("");
+}
+
+async function sha256(value) {
+    const data = new TextEncoder().encode(value);
+
+    return crypto.subtle.digest(
+        "SHA-256",
+        data
+    );
+}
+
+function base64Url(buffer) {
+    const bytes = new Uint8Array(buffer);
+
+    let binary = "";
+
+    for (const byte of bytes) {
+        binary += String.fromCharCode(byte);
+    }
+
+    return btoa(binary)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+}
+
+async function createCodeChallenge(verifier) {
+    return base64Url(
+        await sha256(verifier)
+    );
+}
+
+/* =========================================================
+   SPOTIFY AUTH
+========================================================= */
+
+async function login() {
+    const clientId =
+        clientIdInput.value.trim() ||
+        CONFIG.clientId.trim();
+
+    if (!clientId) {
+        showToast("Enter your Spotify Client ID first.");
+        return;
+    }
+
+    if (!window.isSecureContext) {
+        showToast(
+            "Spotify login requires HTTPS, except 127.0.0.1."
+        );
+        return;
+    }
+
+    const verifier = randomString(96);
+    const challenge =
+        await createCodeChallenge(verifier);
+
+    const state = randomString(32);
+
+    sessionStorage.setItem(
+        "carthing_code_verifier",
+        verifier
+    );
+
+    sessionStorage.setItem(
+        "carthing_state",
+        state
+    );
+
+    localStorage.setItem(
+        "carthing_client_id",
+        clientId
+    );
+
+    const url =
+        new URL(`${ACCOUNTS}/authorize`);
+
+    url.search = new URLSearchParams({
+        response_type: "code",
+        client_id: clientId,
+        scope: CONFIG.scopes,
+        redirect_uri: CONFIG.redirectUri,
+        code_challenge_method: "S256",
+        code_challenge: challenge,
+        state
+    });
+
+    window.location.href = url.toString();
+}
+
+async function handleOAuthCallback() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const code = params.get("code");
+    const returnedState = params.get("state");
+    const error = params.get("error");
+
+    if (error) {
+        showToast(
+            `Spotify login failed: ${error}`
+        );
+
+        history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+        return;
+    }
+
+    if (!code) {
+        return;
+    }
+
+    const expectedState =
+        sessionStorage.getItem(
+            "carthing_state"
+        );
+
+    if (!expectedState ||
+        returnedState !== expectedState) {
+
+        showToast("Spotify login state mismatch.");
+
+        return;
+    }
+
+    const verifier =
+        sessionStorage.getItem(
+            "carthing_code_verifier"
+        );
+
+    if (!verifier) {
+        showToast(
+            "Missing PKCE verifier."
+        );
+
+        return;
+    }
+
+    const clientId =
+        localStorage.getItem(
+            "carthing_client_id"
+        ) ||
+        CONFIG.clientId;
+
+    try {
+
+        setStatus(
+            "Signing into Spotify..."
+        );
+
+        const body =
+            new URLSearchParams({
+                grant_type: "authorization_code",
+                code,
+                redirect_uri:
+                    CONFIG.redirectUri,
+                client_id: clientId,
+                code_verifier: verifier
+            });
+
+        const response =
+            await fetch(
+                `${ACCOUNTS}/api/token`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+                    body
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error_description ||
+                data.error ||
+                "Token exchange failed"
+            );
+        }
+
+        accessToken =
+            data.access_token;
+
+        refreshToken =
+            data.refresh_token ||
+            refreshToken;
+
+        tokenExpiresAt =
+            Date.now() +
+            (data.expires_in * 1000);
+
+        localStorage.setItem(
+            "carthing_access_token",
+            accessToken
+        );
+
+        if (refreshToken) {
+            localStorage.setItem(
+                "carthing_refresh_token",
+                refreshToken
+            );
+        }
+
+        localStorage.setItem(
+            "carthing_token_expires",
+            tokenExpiresAt
+        );
+
+        sessionStorage.removeItem(
+            "carthing_code_verifier"
+        );
+
+        sessionStorage.removeItem(
+            "carthing_state"
+        );
+
+        history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+        demo = false;
+
+        setStatus(
+            "Spotify connected",
+            "connected"
+        );
+
+        showToast(
+            "Spotify connected."
+        );
+
+        await refreshSpotify();
+
+    } catch (error) {
+
+        console.error(error);
+
+        setStatus(
+            "Spotify authentication failed",
+            "error"
+        );
+
+        showToast(error.message);
+    }
+}
+
+async function refreshAccessToken() {
+
+    if (!refreshToken) {
+        return false;
+    }
+
+    const clientId =
+        localStorage.getItem(
+            "carthing_client_id"
+        ) ||
+        CONFIG.clientId;
+
+    try {
+
+        const body =
+            new URLSearchParams({
+                grant_type: "refresh_token",
+                refresh_token: refreshToken,
+                client_id: clientId
+            });
+
+        const response =
+            await fetch(
+                `${ACCOUNTS}/api/token`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+                    body
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error_description ||
+                "Refresh failed"
+            );
+        }
+
+        accessToken =
+            data.access_token;
+
+        if (data.refresh_token) {
+            refreshToken =
+                data.refresh_token;
+
+            localStorage.setItem(
+                "carthing_refresh_token",
+                refreshToken
+            );
+        }
+
+        tokenExpiresAt =
+            Date.now() +
+            data.expires_in * 1000;
+
+        localStorage.setItem(
+            "carthing_access_token",
+            accessToken
+        );
+
+        localStorage.setItem(
+            "carthing_token_expires",
+            tokenExpiresAt
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(error);
+
+        logout(false);
+
+        return false;
+    }
+}
+
+/* =========================================================
+   API
+========================================================= */
+
+async function spotifyFetch(
+    path,
+    options = {},
+    retry = true
+) {
+
+    if (!accessToken) {
+        throw new Error(
+            "Not authenticated with Spotify."
+        );
+    }
+
+    if (
+        tokenExpiresAt &&
+        Date.now() >
+            tokenExpiresAt - 60000
+    ) {
+        await refreshAccessToken();
+    }
+
+    const headers = {
+        ...(options.headers || {}),
+        Authorization:
+            `Bearer ${accessToken}`
+    };
+
+    if (
+        options.body &&
+        !headers["Content-Type"]
+    ) {
+        headers["Content-Type"] =
+            "application/json";
+    }
+
+    const response =
+        await fetch(
+            `${API}${path}`,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    if (
+        response.status === 401 &&
+        retry &&
+        refreshToken
+    ) {
+        const refreshed =
+            await refreshAccessToken();
+
+        if (refreshed) {
+            return spotifyFetch(
+                path,
+                options,
+                false
+            );
+        }
+    }
+
+    if (!response.ok) {
+
+        let message =
+            `Spotify API error ${response.status}`;
+
+        try {
+            const data =
+                await response.json();
+
+            message =
+                data.error?.message ||
+                data.error_description ||
+                message;
+
+        } catch (_) {}
+
+        throw new Error(message);
+    }
+
+    if (response.status === 204) {
+        return null;
+    }
+
+    const text =
+        await response.text();
+
+    return text
+        ? JSON.parse(text)
+        : null;
+}
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+async function refreshSpotify() {
+
+    if (!accessToken) {
+        demo = true;
+        return;
+    }
+
+    try {
+
+        await loadPlayback();
+        await loadDevices();
+
+        setStatus(
+            getSelectedDeviceName(),
+            "connected"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        if (
+            error.message.includes("401") ||
+            error.message.includes("authenticated")
+        ) {
+            setStatus(
+                "Spotify authentication expired",
+                "error"
+            );
+        } else {
+            setStatus(
+                "Spotify connected",
+                "connected"
+            );
+        }
+
+        showToast(error.message);
+    }
+}
+
+async function loadPlayback() {
+
+    const data =
+        await spotifyFetch(
+            "/me/player"
+        );
+
+    playback = data;
+
+    if (!data || !data.item) {
+        setStatus(
+            "Spotify connected — nothing playing",
+            "connected"
+        );
+
+        return;
+    }
+
+    demo = false;
+
+    const item = data.item;
+
+    trackTitle.textContent =
+        item.name || "Unknown";
+
+    trackArtist.textContent =
+        item.artists
+            ?.map(a => a.name)
+            .join(", ") ||
+        "Unknown artist";
+
+    const image =
+        item.album?.images?.[0]?.url;
+
+    if (image) {
+        albumArt.src = image;
+        artwork.classList.add(
+            "has-image"
+        );
+    } else {
+        albumArt.removeAttribute("src");
+        artwork.classList.remove(
+            "has-image"
+        );
+    }
+
+    const position =
+        data.progress_ms || 0;
+
+    const total =
+        item.duration_ms || 1;
+
+    if (!progressDragging) {
+        progress.max = total;
+        progress.value = position;
+    }
+
+    currentTime.textContent =
+        formatTime(position);
+
+    duration.textContent =
+        formatTime(total);
+
+    playButton.textContent =
+        data.is_playing ? "❚❚" : "▶";
+
+    shuffle = !!data.shuffle_state;
+
+    shuffleButton.classList.toggle(
+        "active",
+        shuffle
+    );
+
+    repeatMode =
+        data.repeat_state || "off";
+
+    repeatButton.classList.toggle(
+        "active",
+        repeatMode !== "off"
+    );
+
+    if (data.device) {
+
+        if (!selectedDeviceId) {
+            selectedDeviceId =
+                data.device.id || "";
+
+            localStorage.setItem(
+                "carthing_device_id",
+                selectedDeviceId
+            );
+        }
+    }
+
+    if (data.device?.volume_percent != null) {
+        volume =
+            data.device.volume_percent;
+
+        updateVolumeUI();
+    }
+
+    const liked =
+        await checkSaved(
+            item.id
+        );
+
+    likeButton.textContent =
+        liked ? "♥" : "♡";
+
+    likeButton.classList.toggle(
+        "active",
+        liked
+    );
+
+    setStatus(
+        data.device?.name ||
+        "Spotify connected",
+        "connected"
+    );
+}
+
+async function loadDevices() {
+
+    const data =
+        await spotifyFetch(
+            "/me/player/devices"
+        );
+
+    devices =
+        data?.devices || [];
+
+    renderDevices();
+}
+
+function getSelectedDeviceName() {
+
+    const device =
+        devices.find(
+            d => d.id === selectedDeviceId
+        );
+
+    if (device) {
+        return device.name;
+    }
+
+    return playback?.device?.name ||
+        "Spotify connected";
+}
+
+function renderDevices() {
+
+    if (!devices.length) {
+
+        deviceContent.innerHTML = `
+            <div class="warning">
+                No Spotify Connect devices are
+                currently available.
+                Make sure Spotify is open on your
+                Windows PC and signed into the same
+                Spotify account.
+            </div>
+        `;
+
+        return;
+    }
+
+    deviceContent.innerHTML =
+        devices.map(device => {
+
+            const selected =
+                device.id === selectedDeviceId ||
+                device.is_active;
+
+            let icon = "▣";
+
+            if (
+                device.type === "Smartphone" ||
+                device.type === "Tablet"
+            ) {
+                icon = "▯";
+            }
+
+            if (
+                device.type === "Speaker"
+            ) {
+                icon = "◉";
+            }
+
+            return `
+                <button
+                    class="device-item ${selected ? "current" : ""}"
+                    data-device-id="${escapeHtml(device.id)}">
+
+                    <div class="device-icon">
+                        ${icon}
+                    </div>
+
+                    <div class="device-info">
+                        <div class="device-name">
+                            ${escapeHtml(device.name)}
+                        </div>
+
+                        <div class="device-type">
+                            ${escapeHtml(device.type || "Spotify device")}
+                            ${device.is_active ? " • Active" : ""}
+                        </div>
+                    </div>
+
+                    <div>
+                        ${selected ? "✓" : ""}
+                    </div>
+                </button>
+            `;
+
+        }).join("");
+
+    deviceContent
+        .querySelectorAll("[data-device-id]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    selectDevice(
+                        button.dataset.deviceId
+                    )
+            );
+
+        });
+}
+
+async function selectDevice(deviceId) {
+
+    try {
+
+        await spotifyFetch(
+            "/me/player",
+            {
+                method: "PUT",
+                body: JSON.stringify({
+                    device_ids: [deviceId],
+                    play: false
+                })
+            }
+        );
+
+        selectedDeviceId =
+            deviceId;
+
+        localStorage.setItem(
+            "carthing_device_id",
+            deviceId
+        );
+
+        const device =
+            devices.find(
+                d => d.id === deviceId
+            );
+
+        setStatus(
+            device?.name ||
+            "Spotify device",
+            "connected"
+        );
+
+        showToast(
+            `Controlling ${device?.name || "device"}`
+        );
+
+        await loadPlayback();
+        await loadDevices();
+
+    } catch (error) {
+
+        showToast(
+            `Could not switch device: ${error.message}`
+        );
+    }
+}
+
+/* =========================================================
+   PLAYBACK COMMANDS
+========================================================= */
+
+async function togglePlay() {
+
+    if (demo) {
+
+        demoPlaying =
+            !demoPlaying;
+
+        playButton.textContent =
+            demoPlaying ? "❚❚" : "▶";
+
+        return;
+    }
+
+    try {
+
+        if (playback?.is_playing) {
+
+            await spotifyFetch(
+                "/me/player/pause",
+                {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        device_id:
+                            selectedDeviceId ||
+                            undefined
+                    })
+                }
+            );
+
+        } else {
+
+            await spotifyFetch(
+                "/me/player/play",
+                {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        device_id:
+                            selectedDeviceId ||
+                            undefined
+                    })
+                }
+            );
+        }
+
+        await loadPlayback();
+
+    } catch (error) {
+        showToast(error.message);
+    }
+}
+
+async function nextTrack() {
+
+    if (demo) {
+        demoPosition = 0;
+        return;
+    }
+
+    try {
+
+        await spotifyFetch(
+            "/me/player/next",
+            {
+                method: "POST",
+                body: JSON.stringify({})
+            }
+        );
+
+        await wait(500);
+        await loadPlayback();
+
+    } catch (error) {
+        showToast(error.message);
+    }
+}
+
+async function previousTrack() {
+
+    if (demo) {
+        demoPosition = 0;
+        return;
+    }
+
+    try {
+
+        await spotifyFetch(
+            "/me/player/previous",
+            {
+                method: "POST",
+                body: JSON.stringify({})
+            }
+        );
+
+        await wait(500);
+        await loadPlayback();
+
+    } catch (error) {
+        showToast(error.message);
+    }
+}
+
+function wait(ms) {
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
+/* =========================================================
+   SEEK
+========================================================= */
+
+progress.addEventListener(
+    "pointerdown",
+    () => {
+        progressDragging = true;
+    }
+);
+
+progress.addEventListener(
+    "pointerup",
+    async () => {
+
+        progressDragging = false;
+
+        if (demo) {
+
+            demoPosition =
+                Number(progress.value);
+
+            return;
+        }
+
+        try {
+
+            await spotifyFetch(
+                `/me/player/seek?position_ms=${Math.round(
+                    Number(progress.value)
+                )}`,
+                {
+                    method: "PUT"
+                }
+            );
+
+        } catch (error) {
+            showToast(error.message);
+        }
+    }
+);
+
+progress.addEventListener(
+    "input",
+    () => {
+
+        currentTime.textContent =
+            formatTime(
+                Number(progress.value)
+            );
+    }
+);
+
+/* =========================================================
+   VOLUME
+========================================================= */
+
+function updateVolumeUI() {
+
+    volume =
+        Math.max(
+            0,
+            Math.min(100, Number(volume))
+        );
+
+    volumeNumber.textContent =
+        Math.round(volume);
+
+    const angle =
+        -135 + (volume / 100) * 270;
+
+    volumeIndicator.style.transform =
+        `rotate(${angle}deg)`;
+}
+
+async function setVolume(value) {
+
+    volume =
+        Math.max(
+            0,
+            Math.min(100, Math.round(value))
+        );
+
+    updateVolumeUI();
+
+    if (demo) {
+        return;
+    }
+
+    try {
+
+        await spotifyFetch(
+            `/me/player/volume?volume_percent=${volume}`,
+            {
+                method: "PUT"
+            }
+        );
+
+    } catch (error) {
+        showToast(error.message);
+    }
+}
+
+volumeWheel.addEventListener(
+    "pointerdown",
+    event => {
+
+        volumeDragging = true;
+
+        volumeStartY =
+            event.clientY;
+
+        volumeStartValue =
+            volume;
+
+        volumeWheel.setPointerCapture(
+            event.pointerId
+        );
+    }
+);
+
+volumeWheel.addEventListener(
+    "pointermove",
+    event => {
+
+        if (!volumeDragging) {
+            return;
+        }
+
+        /*
+           Drag upward = louder.
+           Drag downward = quieter.
+
+           3px of movement = roughly 1 volume unit.
+        */
+
+        const delta =
+            (volumeStartY - event.clientY) / 3;
+
+        setVolume(
+            volumeStartValue + delta
+        );
+    }
+);
+
+volumeWheel.addEventListener(
+    "pointerup",
+    () => {
+        volumeDragging = false;
+    }
+);
+
+volumeWheel.addEventListener(
+    "pointercancel",
+    () => {
+        volumeDragging = false;
+    }
+);
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+shuffleButton.addEventListener(
+    "click",
+    async () => {
+
+        if (demo) {
+
+            shuffle = !shuffle;
+
+            shuffleButton.classList.toggle(
+                "active",
+                shuffle
+            );
+
+            return;
+        }
+
+        try {
+
+            shuffle = !shuffle;
+
+            await spotifyFetch(
+                `/me/player/shuffle?state=${shuffle}`,
+                {
+                    method: "PUT"
+                }
+            );
+
+            shuffleButton.classList.toggle(
+                "active",
+                shuffle
+            );
+
+        } catch (error) {
+
+            shuffle = !shuffle;
+
+            showToast(error.message);
+        }
+    }
+);
+
+/* =========================================================
+   REPEAT
+========================================================= */
+
+repeatButton.addEventListener(
+    "click",
+    async () => {
+
+        const states =
+            ["off", "context", "track"];
+
+        const index =
+            states.indexOf(repeatMode);
+
+        const next =
+            states[
+                (index + 1) %
+                states.length
+            ];
+
+        if (demo) {
+
+            repeatMode = next;
+
+            repeatButton.classList.toggle(
+                "active",
+                repeatMode !== "off"
+            );
+
+            repeatButton.textContent =
+                repeatMode === "track"
+                    ? "↻¹"
+                    : "↻";
+
+            return;
+        }
+
+        try {
+
+            await spotifyFetch(
+                `/me/player/repeat?state=${next}`,
+                {
+                    method: "PUT"
+                }
+            );
+
+            repeatMode = next;
+
+            repeatButton.classList.toggle(
+                "active",
+                repeatMode !== "off"
+            );
+
+            repeatButton.textContent =
+                repeatMode === "track"
+                    ? "↻¹"
+                    : "↻";
+
+        } catch (error) {
+            showToast(error.message);
+        }
+    }
+);
+
+/* =========================================================
+   LIKE / SAVE
+========================================================= */
+
+async function checkSaved(trackId) {
+
+    if (!trackId || !accessToken) {
+        return false;
+    }
+
+    try {
+
+        /*
+           Current Spotify library endpoint.
+        */
+
+        const data =
+            await spotifyFetch(
+                `/me/library/contains?uris=${encodeURIComponent(
+                    `spotify:track:${trackId}`
+                )}`
+            );
+
+        return !!data?.[0];
+
+    } catch (error) {
+
+        /*
+           If the current account/API configuration
+           doesn't expose this endpoint, don't break
+           the player.
+        */
+
+        console.warn(
+            "Could not check saved state:",
+            error
+        );
+
+        return false;
+    }
+}
+
+likeButton.addEventListener(
+    "click",
+    async () => {
+
+        if (demo) {
+
+            likeButton.classList.toggle(
+                "active"
+            );
+
+            likeButton.textContent =
+                likeButton.classList.contains(
+                    "active"
+                )
+                    ? "♥"
+                    : "♡";
+
+            return;
+        }
+
+        const item =
+            playback?.item;
+
+        if (!item?.uri) {
+            return;
+        }
+
+        const isLiked =
+            likeButton.classList.contains(
+                "active"
+            );
+
+        try {
+
+            if (isLiked) {
+
+                await spotifyFetch(
+                    `/me/library?uris=${encodeURIComponent(
+                        item.uri
+                    )}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                likeButton.classList.remove(
+                    "active"
+                );
+
+                likeButton.textContent = "♡";
+
+            } else {
+
+                await spotifyFetch(
+                    `/me/library?uris=${encodeURIComponent(
+                        item.uri
+                    )}`,
+                    {
+                        method: "PUT"
+                    }
+                );
+
+                likeButton.classList.add(
+                    "active"
+                );
+
+                likeButton.textContent = "♥";
+            }
+
+        } catch (error) {
+            showToast(error.message);
+        }
+    }
+);
+
+/* =========================================================
+   QUEUE
+========================================================= */
+
+async function loadQueue() {
+
+    try {
+
+        const data =
+            await spotifyFetch(
+                "/me/player/queue"
+            );
+
+        queue =
+            data?.queue || [];
+
+        renderQueue();
+
+    } catch (error) {
+
+        queueContent.innerHTML = `
+            <div class="warning">
+                Could not load queue.<br><br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    }
+}
+
+function renderQueue() {
+
+    if (!queue.length) {
+
+        queueContent.innerHTML = `
+            <div class="warning">
+                The Spotify queue is empty.
+            </div>
+        `;
+
+        return;
+    }
+
+    queueContent.innerHTML =
+        queue.map((item, index) => {
+
+            const image =
+                item.album?.images?.[2]?.url ||
+                item.album?.images?.[0]?.url ||
+                "";
+
+            const artists =
+                item.artists
+                    ?.map(a => a.name)
+                    .join(", ") ||
+                "";
+
+            return `
+                <div class="queue-item">
+
+                    ${
+                        image
+                        ? `<img class="queue-art"
+                               src="${escapeHtml(image)}"
+                               alt="">`
+                        : `<div class="queue-art"></div>`
+                    }
+
+                    <div class="queue-info">
+
+                        <div class="queue-title">
+                            ${escapeHtml(item.name)}
+                        </div>
+
+                        <div class="queue-artist">
+                            ${escapeHtml(artists)}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="queue-play"
+                        data-queue-uri="${escapeHtml(item.uri)}"
+                        title="Add to queue again">
+                        +
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+    queueContent
+        .querySelectorAll("[data-queue-uri]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    addToQueue(
+                        button.dataset.queueUri
+                    )
+            );
+
+        });
+}
+
+async function addToQueue(uri) {
+
+    if (!uri) {
+        return;
+    }
+
+    try {
+
+        await spotifyFetch(
+            `/me/player/queue?uri=${encodeURIComponent(uri)}`,
+            {
+                method: "POST"
+            }
+        );
+
+        showToast(
+            "Added to Spotify queue."
+        );
+
+    } catch (error) {
+
+        showToast(
+            `Could not add to queue: ${error.message}`
+        );
+    }
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+redirectInput.value =
+    CONFIG.redirectUri;
+
+clientIdInput.value =
+    localStorage.getItem(
+        "carthing_client_id"
+    ) ||
+    CONFIG.clientId;
+
+$("saveClientButton").addEventListener(
+    "click",
+    () => {
+
+        const id =
+            clientIdInput.value.trim();
+
+        if (!id) {
+            showToast(
+                "Enter a Spotify Client ID."
+            );
+
+            return;
+        }
+
+        localStorage.setItem(
+            "carthing_client_id",
+            id
+        );
+
+        showToast(
+            "Client ID saved."
+        );
+    }
+);
+
+$("loginButton").addEventListener(
+    "click",
+    login
+);
+
+$("logoutButton").addEventListener(
+    "click",
+    () => logout(true)
+);
+
+function logout(showMessage = true) {
+
+    accessToken = "";
+    refreshToken = "";
+    tokenExpiresAt = 0;
+
+    localStorage.removeItem(
+        "carthing_access_token"
+    );
+
+    localStorage.removeItem(
+        "carthing_refresh_token"
+    );
+
+    localStorage.removeItem(
+        "carthing_token_expires"
+    );
+
+    demo = true;
+    demoPlaying = false;
+
+    setStatus(
+        "Demo mode"
+    );
+
+    playButton.textContent = "▶";
+
+    if (showMessage) {
+        showToast(
+            "Signed out of Spotify."
+        );
+    }
+
+    closeDrawers();
+}
+
+/* =========================================================
+   DEMO MODE
+========================================================= */
+
+function updateDemo() {
+
+    if (!demo) {
+        return;
+    }
+
+    if (demoPlaying) {
+
+        demoPosition += 1000 / 10;
+
+        if (demoPosition >= demoDuration * 1000) {
+            demoPosition = 0;
+        }
+    }
+
+    progress.max =
+        demoDuration * 1000;
+
+    progress.value =
+        demoPosition;
+
+    currentTime.textContent =
+        formatTime(demoPosition);
+
+    duration.textContent =
+        formatTime(
+            demoDuration * 1000
+        );
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+function animateTrackChange() {
+
+    trackTitle.animate(
+        [
+            {
+                opacity: .35,
+                transform: "translateY(5px)"
+            },
+            {
+                opacity: 1,
+                transform: "translateY(0)"
+            }
+        ],
+        {
+            duration: 240,
+            easing: "ease-out"
+        }
+    );
+
+    artwork.animate(
+        [
+            {
+                opacity: .5,
+                transform: "scale(.985)"
+            },
+            {
+                opacity: 1,
+                transform: "scale(1)"
+            }
+        ],
+        {
+            duration: 300,
+            easing: "ease-out"
+        }
+    );
+}
+
+/* =========================================================
+   POLLING
+========================================================= */
+
+let lastTrackId = null;
+
+async function pollSpotify() {
+
+    if (!accessToken || demo) {
+        return;
+    }
+
+    try {
+
+        const before =
+            playback?.item?.id;
+
+        await loadPlayback();
+
+        const after =
+            playback?.item?.id;
+
+        if (
+            before &&
+            after &&
+            before !== after
+        ) {
+            animateTrackChange();
+        }
+
+        if (after !== lastTrackId) {
+
+            lastTrackId = after;
+
+            if (after) {
+                await loadQueue();
+            }
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Spotify polling:",
+            error.message
+        );
+    }
+}
+
+/* =========================================================
+   KEYBOARD / HARDWARE SUPPORT
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.target.tagName === "INPUT" ||
+            event.target.tagName === "TEXTAREA"
+        ) {
+            return;
+        }
+
+        switch (event.key) {
+
+            case " ":
+                event.preventDefault();
+                togglePlay();
+                break;
+
+            case "ArrowRight":
+                nextTrack();
+                break;
+
+            case "ArrowLeft":
+                previousTrack();
+                break;
+
+            case "ArrowUp":
+                setVolume(volume + 5);
+                break;
+
+            case "ArrowDown":
+                setVolume(volume - 5);
+                break;
+        }
+    }
+);
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+async function init() {
+
+    redirectInput.value =
+        CONFIG.redirectUri;
+
+    updateVolumeUI();
+
+    await handleOAuthCallback();
+
+    if (
+        accessToken &&
+        tokenExpiresAt &&
+        Date.now() >
+            tokenExpiresAt - 60000
+    ) {
+        await refreshAccessToken();
+    }
+
+    if (accessToken) {
+
+        demo = false;
+
+        setStatus(
+            "Connecting to Spotify..."
+        );
+
+        await refreshSpotify();
+
+    } else {
+
+        demo = true;
+
+        setStatus(
+            "Demo mode"
+        );
+    }
+}
+
+setInterval(
+    updateDemo,
+    100
+);
+
+setInterval(
+    pollSpotify,
+    2500
+);
+
+init();
+
+</script>
+</body>
+</html>
