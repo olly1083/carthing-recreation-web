@@ -1,286 +1,1687 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
 <title>Car Thing</title>
+
 <link rel="manifest" href="./manifest.json">
+
 <meta name="theme-color" content="#090909">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+>
+
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090909;color:#fff;font-family:Arial,Helvetica,sans-serif}
-body{touch-action:manipulation}button{border:0;color:#fff;background:transparent;cursor:pointer}
-#app{width:100vw;height:100vh;height:100dvh;display:flex;flex-direction:column}
-.topbar{height:58px;min-height:58px;display:flex;align-items:center;padding:0 22px;background:#111;border-bottom:1px solid #242424}
-.logo{font-size:21px;font-weight:800;letter-spacing:1px}.logo span{color:#1ed760}
-.connection{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:14px;color:#aaa}
-.dot{width:10px;height:10px;border-radius:50%;background:#777}.dot.online{background:#1ed760;box-shadow:0 0 10px #1ed760}.dot.error{background:#e74c3c}
-.main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(220px,34%) 1fr 150px;gap:26px;padding:26px}
-.art-area{display:flex;align-items:center;justify-content:center}
-.album-art{width:min(34vw,48vh);height:min(34vw,48vh);max-width:430px;max-height:430px;min-width:190px;min-height:190px;background:linear-gradient(135deg,#202020,#101010);border-radius:8px;overflow:hidden;box-shadow:0 15px 45px rgba(0,0,0,.55)}
-.album-art img{width:100%;height:100%;object-fit:cover}.album-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:70px;color:#555}
-.center{min-width:0;display:flex;flex-direction:column;justify-content:center}
-.track-title{font-size:clamp(26px,4vw,50px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.track-artist{margin-top:8px;font-size:clamp(17px,2vw,25px);color:#a7a7a7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.album-name{margin-top:5px;color:#686868;font-size:15px}
-.progress-area{margin-top:36px}.progress{width:100%;height:7px;appearance:none;background:#3b3b3b;border-radius:10px;outline:none}.progress::-webkit-slider-thumb{appearance:none;width:18px;height:18px;background:#fff;border-radius:50%}.progress::-moz-range-thumb{width:18px;height:18px;background:#fff;border:0;border-radius:50%}
-.times{margin-top:7px;display:flex;justify-content:space-between;color:#777;font-size:13px}
-.controls{margin-top:30px;display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,28px)}
-.control{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;background:#191919;transition:transform .1s,background .1s}.control:active{transform:scale(.9);background:#292929}
-.control.main-control{width:78px;height:78px;background:#fff;color:#000;font-size:31px}.control.active{color:#1ed760}
-.right{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}.volume-label{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:1px}
-.volume-wheel{position:relative;width:112px;height:112px;border-radius:50%;background:conic-gradient(#1ed760 0deg,#1ed760 var(--volume),#333 var(--volume),#333 360deg);display:flex;align-items:center;justify-content:center}
-.volume-wheel:before{content:"";position:absolute;width:82px;height:82px;border-radius:50%;background:#111}.volume-value{position:relative;z-index:2;font-size:19px;font-weight:bold}
-.vol-buttons{display:flex;gap:10px}.small-btn{width:42px;height:42px;border-radius:50%;background:#191919;font-size:20px}
-.bottom{height:60px;min-height:60px;border-top:1px solid #242424;background:#111;display:flex;align-items:center;justify-content:center;gap:12px}.bottom button{min-width:110px;padding:11px 18px;border-radius:8px;background:#1b1b1b;color:#aaa;font-size:14px}
-.drawer{position:fixed;top:0;right:-420px;width:min(420px,90vw);height:100vh;height:100dvh;background:#121212;z-index:20;box-shadow:-20px 0 50px rgba(0,0,0,.5);transition:right .25s ease;display:flex;flex-direction:column}.drawer.open{right:0}
-.drawer-header{height:65px;min-height:65px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #292929}.drawer-title{font-size:20px;font-weight:bold}.close{margin-left:auto;font-size:26px}.drawer-content{padding:20px;overflow-y:auto}.info{color:#888;line-height:1.5}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:15;display:none}.overlay.show{display:block}
-#installBtn{display:none}
-@media(max-width:800px){
-.main{grid-template-columns:1fr 100px;gap:15px;padding:15px}.art-area{display:none}.right{gap:12px}.volume-wheel{width:90px;height:90px}.volume-wheel:before{width:66px;height:66px}.controls{gap:9px}.control{width:48px;height:48px}.control.main-control{width:64px;height:64px}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
-@media(orientation:portrait){body:before{content:"Rotate your phone to landscape";position:fixed;z-index:9999;inset:0;background:#090909;color:white;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold;text-align:center;padding:30px}}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #090909;
+    color: white;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button {
+    border: 0;
+    color: white;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+}
+
+body {
+    user-select: none;
+}
+
+#app {
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            #252525 0%,
+            #111 35%,
+            #090909 70%
+        );
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    height: 58px;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid #292929;
+    background: rgba(8,8,8,.9);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.4px;
+}
+
+.logo-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1ed760;
+    box-shadow: 0 0 13px rgba(30,215,96,.6);
+}
+
+.connection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.connection-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #777;
+}
+
+.connection.online .connection-dot {
+    background: #1ed760;
+    box-shadow: 0 0 9px rgba(30,215,96,.65);
+}
+
+.connection.error .connection-dot {
+    background: #ff4545;
+    box-shadow: 0 0 9px rgba(255,69,69,.6);
+}
+
+.top-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.top-button {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.top-button:active {
+    background: #272727;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(230px, 36vw) 1fr;
+    gap: clamp(20px, 4vw, 55px);
+    padding: clamp(18px, 4vw, 42px);
+}
+
+/* =========================
+   ART
+========================= */
+
+.art-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+.art {
+    width: min(36vw, 48vh);
+    height: min(36vw, 48vh);
+    min-width: 190px;
+    min-height: 190px;
+    max-width: 440px;
+    max-height: 440px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #242424,
+            #101010
+        );
+
+    background-size: cover;
+    background-position: center;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.65),
+        0 0 0 1px rgba(255,255,255,.04);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.07),
+            transparent 30%
+        );
+    pointer-events: none;
+}
+
+/* =========================
+   PLAYER
+========================= */
+
+.player {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: clamp(0px, 3vw, 35px);
+}
+
+.now-playing-label {
+    color: #999;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: clamp(26px, 4vw, 55px);
+    line-height: 1.05;
+    font-weight: 850;
+    letter-spacing: -1.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artist {
+    margin-top: 10px;
+    font-size: clamp(17px, 2vw, 25px);
+    color: #d0d0d0;
+    font-weight: 650;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #858585;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-area {
+    margin-top: 35px;
+}
+
+.progress {
+    position: relative;
+    height: 7px;
+    border-radius: 99px;
+    background: #303030;
+    overflow: visible;
+    cursor: pointer;
+}
+
+.progress-fill {
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    left: 0;
+    top: 0;
+    border-radius: inherit;
+    background: #fff;
+}
+
+.progress-thumb {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: white;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 0%;
+    box-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+
+.times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 9px;
+    color: #777;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 24px);
+    margin-top: 27px;
+}
+
+.control {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    background: #1a1a1a;
+    transition: transform .1s, background .1s;
+}
+
+.control:active {
+    transform: scale(.91);
+    background: #303030;
+}
+
+.control.small {
+    background: transparent;
+    color: #999;
+    font-size: 21px;
+}
+
+.control.small.active {
+    color: #1ed760;
+}
+
+.play {
+    width: 70px;
+    height: 70px;
+    background: white;
+    color: #090909;
+    font-size: 30px;
+}
+
+.play:active {
+    background: #ddd;
+}
+
+/* =========================
+   VOLUME
+========================= */
+
+.volume-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.volume-icon {
+    color: #888;
+    font-size: 20px;
+}
+
+.volume-slider {
+    flex: 1;
+    max-width: 330px;
+    height: 6px;
+    border-radius: 99px;
+    background: #2d2d2d;
+    position: relative;
+}
+
+.volume-fill {
+    height: 100%;
+    width: 50%;
+    border-radius: inherit;
+    background: #aaa;
+}
+
+/* =========================
+   DRAWER
+========================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    backdrop-filter: blur(5px);
+    display: none;
+    z-index: 10;
+}
+
+.overlay.open {
+    display: block;
+}
+
+.drawer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100dvh;
+    width: min(390px, 90vw);
+    background: #141414;
+    border-left: 1px solid #2b2b2b;
+    z-index: 11;
+
+    transform: translateX(100%);
+    transition: transform .25s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    height: 65px;
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid #292929;
+}
+
+.drawer-title {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.close {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 22px;
+}
+
+.close:active {
+    background: #292929;
+}
+
+.drawer-content {
+    padding: 20px;
+    overflow: auto;
+}
+
+.setting {
+    padding: 16px 0;
+    border-bottom: 1px solid #282828;
+}
+
+.setting-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.setting-description {
+    color: #777;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* =========================
+   INSTALL
+========================= */
+
+.install {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    z-index: 20;
+
+    background: white;
+    color: black;
+
+    padding: 13px 20px;
+    border-radius: 99px;
+
+    font-weight: 800;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+
+    display: none;
+}
+
+.install.show {
+    display: block;
+}
+
+/* =========================
+   PORTRAIT WARNING
+========================= */
+
+.rotate-warning {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    background: #090909;
+    color: white;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    padding: 30px;
+}
+
+.rotate-inner {
+    max-width: 320px;
+}
+
+.rotate-icon {
+    font-size: 55px;
+    margin-bottom: 20px;
+}
+
+.rotate-title {
+    font-size: 25px;
+    font-weight: 850;
+}
+
+.rotate-text {
+    color: #888;
+    margin-top: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (orientation: portrait) {
+
+    .rotate-warning {
+        display: flex;
+    }
+
+}
+
+@media (max-height: 550px) {
+
+    .topbar {
+        height: 48px;
+        min-height: 48px;
+    }
+
+    .main {
+        padding: 15px 25px;
+        gap: 25px;
+    }
+
+    .art {
+        width: min(35vw, 55vh);
+        height: min(35vw, 55vh);
+    }
+
+    .progress-area {
+        margin-top: 20px;
+    }
+
+    .controls {
+        margin-top: 17px;
+    }
+
+    .volume-area {
+        margin-top: 15px;
+    }
+
+}
+
 </style>
 </head>
+
 <body>
+
 <div id="app">
-<div class="topbar"><div class="logo">CAR<span>THING</span></div><div class="connection"><div id="connectionDot" class="dot"></div><span id="connectionText">Connecting...</span></div></div>
-<main class="main">
-<section class="art-area"><div class="album-art"><img id="albumArt" style="display:none" alt="Album artwork"><div id="albumPlaceholder" class="album-placeholder">♪</div></div></section>
-<section class="center">
-<div id="trackTitle" class="track-title">Nothing Playing</div><div id="trackArtist" class="track-artist">—</div><div id="albumName" class="album-name">—</div>
-<div class="progress-area"><input id="progress" class="progress" type="range" min="0" max="100" value="0" step="0.1"><div class="times"><span id="currentTime">0:00</span><span id="duration">0:00</span></div></div>
-<div class="controls">
-<button id="shuffleButton" class="control" onclick="toggleShuffle()">🔀</button>
-<button class="control" onclick="previousTrack()">⏮</button>
-<button id="playButton" class="control main-control" onclick="playPause()">▶</button>
-<button class="control" onclick="nextTrack()">⏭</button>
-<button id="repeatButton" class="control" onclick="cycleRepeat()">🔁</button>
-</div>
-</section>
-<section class="right"><div class="volume-label">Volume</div><div id="volumeWheel" class="volume-wheel" style="--volume:0deg"><div id="volumeValue" class="volume-value">0%</div></div><div class="vol-buttons"><button class="small-btn" onclick="changeVolume(-5)">−</button><button class="small-btn" onclick="changeVolume(5)">+</button></div></section>
-</main>
-<footer class="bottom"><button onclick="openDrawer('queue')">☰ Queue</button><button onclick="openDrawer('settings')">⚙ Settings</button><button id="installBtn" onclick="installApp()">＋ Install</button></footer>
+
+    <header class="topbar">
+
+        <div class="logo">
+            <span class="logo-dot"></span>
+            Car Thing
+        </div>
+
+        <div
+            id="connection"
+            class="connection"
+        >
+            <span class="connection-dot"></span>
+            <span id="connectionText">
+                Connecting
+            </span>
+        </div>
+
+        <div class="top-buttons">
+
+            <button
+                class="top-button"
+                onclick="openDrawer('queue')"
+                aria-label="Queue"
+            >
+                ☰
+            </button>
+
+            <button
+                class="top-button"
+                onclick="openDrawer('settings')"
+                aria-label="Settings"
+            >
+                ⚙
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="main">
+
+        <section class="art-section">
+
+            <div
+                id="art"
+                class="art"
+            ></div>
+
+        </section>
+
+
+        <section class="player">
+
+            <div class="now-playing-label">
+                Now Playing
+            </div>
+
+            <div
+                id="title"
+                class="title"
+            >
+                Nothing playing
+            </div>
+
+            <div
+                id="artist"
+                class="artist"
+            >
+                —
+            </div>
+
+            <div
+                id="album"
+                class="album"
+            >
+                —
+            </div>
+
+
+            <div class="progress-area">
+
+                <div
+                    id="progress"
+                    class="progress"
+                >
+
+                    <div
+                        id="progressFill"
+                        class="progress-fill"
+                    ></div>
+
+                    <div
+                        id="progressThumb"
+                        class="progress-thumb"
+                    ></div>
+
+                </div>
+
+                <div class="times">
+
+                    <span id="currentTime">
+                        0:00
+                    </span>
+
+                    <span id="duration">
+                        0:00
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="controls">
+
+                <button
+                    id="shuffle"
+                    class="control small"
+                    onclick="toggleShuffle()"
+                    aria-label="Shuffle"
+                >
+                    🔀
+                </button>
+
+                <button
+                    class="control"
+                    onclick="previousTrack()"
+                    aria-label="Previous"
+                >
+                    ⏮
+                </button>
+
+                <button
+                    id="playButton"
+                    class="control play"
+                    onclick="playPause()"
+                    aria-label="Play"
+                >
+                    ▶
+                </button>
+
+                <button
+                    class="control"
+                    onclick="nextTrack()"
+                    aria-label="Next"
+                >
+                    ⏭
+                </button>
+
+                <button
+                    id="repeat"
+                    class="control small"
+                    onclick="toggleRepeat()"
+                    aria-label="Repeat"
+                >
+                    🔁
+                </button>
+
+            </div>
+
+
+            <div class="volume-area">
+
+                <div class="volume-icon">
+                    🔊
+                </div>
+
+                <div
+                    id="volumeSlider"
+                    class="volume-slider"
+                >
+                    <div
+                        id="volumeFill"
+                        class="volume-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
 
-<div id="overlay" class="overlay" onclick="closeDrawers()"></div>
-<div id="queueDrawer" class="drawer"><div class="drawer-header"><div class="drawer-title">Queue</div><button class="close" onclick="closeDrawers()">×</button></div><div id="queueContent" class="drawer-content"><div class="info">Queue is controlled by Spotify. The basic MPRIS interface does not expose the full Spotify queue.</div></div></div>
-<div id="settingsDrawer" class="drawer"><div class="drawer-header"><div class="drawer-title">Settings</div><button class="close" onclick="closeDrawers()">×</button></div><div class="drawer-content"><p class="info">Linux Car Thing controller<br><br>Python + Flask + MPRIS/playerctl<br><br>No Spotify Web API authentication.</p><button onclick="testConnection()" style="width:100%;padding:15px;background:#1ed760;color:#000;border-radius:8px;font-weight:bold">Test Connection</button></div></div>
+
+<!-- DRAWER OVERLAY -->
+
+<div
+    id="overlay"
+    class="overlay"
+    onclick="closeDrawers()"
+></div>
+
+
+<!-- QUEUE -->
+
+<aside
+    id="queueDrawer"
+    class="drawer"
+>
+
+    <div class="drawer-header">
+
+        <div class="drawer-title">
+            Queue
+        </div>
+
+        <button
+            class="close"
+            onclick="closeDrawers()"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div class="drawer-content">
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Current track
+            </div>
+
+            <div
+                id="queueCurrent"
+                class="setting-description"
+            >
+                Nothing playing
+            </div>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Queue
+            </div>
+
+            <div class="setting-description">
+                Queue information is controlled by
+                Spotify. Playback controls still work
+                normally.
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- SETTINGS -->
+
+<aside
+    id="settingsDrawer"
+    class="drawer"
+>
+
+    <div class="drawer-header">
+
+        <div class="drawer-title">
+            Settings
+        </div>
+
+        <button
+            class="close"
+            onclick="closeDrawers()"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div class="drawer-content">
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Connection
+            </div>
+
+            <div
+                id="serverAddress"
+                class="setting-description"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Player
+            </div>
+
+            <div
+                id="playerName"
+                class="setting-description"
+            >
+                —
+            </div>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Backend
+            </div>
+
+            <div class="setting-description">
+                Linux MPRIS / playerctl
+            </div>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Spotify API
+            </div>
+
+            <div class="setting-description">
+                Not required
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- INSTALL BUTTON -->
+
+<button
+    id="installButton"
+    class="install"
+>
+    Install Car Thing
+</button>
+
+
+<!-- PORTRAIT -->
+
+<div class="rotate-warning">
+
+    <div class="rotate-inner">
+
+        <div class="rotate-icon">
+            📱↔️
+        </div>
+
+        <div class="rotate-title">
+            Rotate your phone
+        </div>
+
+        <div class="rotate-text">
+            Car Thing is designed for landscape mode.
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
-/* IMPORTANT: replace this with your HTTPS Cloudflare Tunnel URL. */
-const PC = "https://YOUR-TUNNEL.trycloudflare.com";
 
-let state={connected:false,playing:false,duration:0,position:0,volume:0,shuffle:false,repeat:"None"};
-let updatingProgress=false;
+/*
+====================================================
+ IMPORTANT
+====================================================
 
-async function api(endpoint,options={}){
-  try{
-    const response=await fetch(PC+endpoint,{...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});
-    if(!response.ok) throw new Error("HTTP "+response.status);
-    return await response.json();
-  }catch(error){console.error("Car Thing API error:",error);setConnection(false);return null;}
+Replace this with your Cloudflare Tunnel URL.
+
+Example:
+
+const PC =
+    "https://purple-example.trycloudflare.com";
+
+====================================================
+*/
+
+const PC =
+    "http://192.168.0.218:8081";
+
+
+/* =========================
+   STATE
+========================= */
+
+let currentStatus = null;
+
+let shuffleState = false;
+
+let repeatMode = "None";
+
+let deferredInstallPrompt = null;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const connection =
+    document.getElementById(
+        "connection"
+    );
+
+const connectionText =
+    document.getElementById(
+        "connectionText"
+    );
+
+const title =
+    document.getElementById(
+        "title"
+    );
+
+const artist =
+    document.getElementById(
+        "artist"
+    );
+
+const album =
+    document.getElementById(
+        "album"
+    );
+
+const art =
+    document.getElementById(
+        "art"
+    );
+
+const playButton =
+    document.getElementById(
+        "playButton"
+    );
+
+const progress =
+    document.getElementById(
+        "progress"
+    );
+
+const progressFill =
+    document.getElementById(
+        "progressFill"
+    );
+
+const progressThumb =
+    document.getElementById(
+        "progressThumb"
+    );
+
+const currentTime =
+    document.getElementById(
+        "currentTime"
+    );
+
+const duration =
+    document.getElementById(
+        "duration"
+    );
+
+const volumeSlider =
+    document.getElementById(
+        "volumeSlider"
+    );
+
+const volumeFill =
+    document.getElementById(
+        "volumeFill"
+    );
+
+
+/* =========================
+   API
+========================= */
+
+async function api(
+    endpoint,
+    options = {}
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                PC + endpoint,
+                {
+                    ...options,
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        ...(options.headers || {})
+                    }
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+        }
+
+        return await response.json();
+
+    } catch (error) {
+
+        setConnection(false);
+
+        console.error(
+            "Car Thing API error:",
+            error
+        );
+
+        return null;
+    }
 }
-function setConnection(connected){
-  state.connected=connected;
-  const dot=document.getElementById("connectionDot"),text=document.getElementById("connectionText");
-  dot.classList.remove("online","error");
-  if(connected){dot.classList.add("online");text.textContent="Connected";}
-  else{dot.classList.add("error");text.textContent="PC Offline";}
+
+
+/* =========================
+   CONNECTION
+========================= */
+
+function setConnection(
+    online
+) {
+
+    connection.classList.toggle(
+        "online",
+        online
+    );
+
+    connection.classList.toggle(
+        "error",
+        !online
+    );
+
+    connectionText.textContent =
+        online
+            ? "Connected"
+            : "Disconnected";
 }
-async function updateStatus(){
-  const data=await api("/status"); if(!data)return;
-  setConnection(true);
-  state.playing=data.state==="Playing"; state.duration=Number(data.length)||0; state.position=Number(data.position)||0; state.volume=Number(data.volume)||0;
-  document.getElementById("trackTitle").textContent=data.title||"Nothing Playing";
-  document.getElementById("trackArtist").textContent=data.artist||"—";
-  document.getElementById("albumName").textContent=data.album||"—";
-  const art=document.getElementById("albumArt"),ph=document.getElementById("albumPlaceholder");
-  if(data.art){art.src=data.art;art.style.display="block";ph.style.display="none";}else{art.style.display="none";ph.style.display="flex";}
-  document.getElementById("playButton").textContent=state.playing?"❚❚":"▶";
-  updateVolumeUI(state.volume);
-  if(!updatingProgress){const p=document.getElementById("progress");p.max=state.duration||100;p.value=Math.min(state.position,state.duration||100);document.getElementById("currentTime").textContent=formatTime(state.position);document.getElementById("duration").textContent=formatTime(state.duration);}
+
+
+/* =========================
+   STATUS
+========================= */
+
+async function updateStatus() {
+
+    const data =
+        await api(
+            "/status"
+        );
+
+    if (!data) {
+        return;
+    }
+
+    currentStatus = data;
+
+    setConnection(true);
+
+    title.textContent =
+        data.title ||
+        "Nothing playing";
+
+    artist.textContent =
+        data.artist ||
+        "—";
+
+    album.textContent =
+        data.album ||
+        "—";
+
+    document.getElementById(
+        "playerName"
+    ).textContent =
+        data.player ||
+        "Spotify";
+
+    document.getElementById(
+        "queueCurrent"
+    ).textContent =
+        data.title
+            ? `${data.title} — ${data.artist}`
+            : "Nothing playing";
+
+
+    if (data.art) {
+
+        art.style.backgroundImage =
+            `url("${data.art}")`;
+
+    } else {
+
+        art.style.backgroundImage =
+            "linear-gradient(135deg,#292929,#101010)";
+
+    }
+
+
+    const playing =
+        data.state === "Playing";
+
+    playButton.textContent =
+        playing
+            ? "⏸"
+            : "▶";
+
+
+    updateProgress(
+        data.position || 0,
+        data.length || 0
+    );
+
+
+    if (
+        typeof data.volume ===
+        "number"
+    ) {
+
+        volumeFill.style.width =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    data.volume
+                )
+            ) + "%";
+
+    }
 }
-async function playPause(){await api("/playpause",{method:"POST"});setTimeout(updateStatus,150)}
-async function nextTrack(){await api("/next",{method:"POST"});setTimeout(updateStatus,500)}
-async function previousTrack(){await api("/previous",{method:"POST"});setTimeout(updateStatus,500)}
 
-const progress=document.getElementById("progress");
-progress.addEventListener("input",()=>{updatingProgress=true;const p=Number(progress.value);document.getElementById("currentTime").textContent=formatTime(p)});
-progress.addEventListener("change",async()=>{await api("/seek",{method:"POST",body:JSON.stringify({position:Number(progress.value)})});updatingProgress=false});
 
-async function setVolume(value){value=Math.max(0,Math.min(100,value));await api("/volume",{method:"POST",body:JSON.stringify({volume:value})});updateVolumeUI(value)}
-async function changeVolume(amount){await setVolume(state.volume+amount)}
-function updateVolumeUI(value){state.volume=Math.max(0,Math.min(100,value));document.getElementById("volumeWheel").style.setProperty("--volume",(state.volume*3.6)+"deg");document.getElementById("volumeValue").textContent=Math.round(state.volume)+"%"}
-const wheel=document.getElementById("volumeWheel");let wheelDragging=false;
-function volumeFromPointer(e){const r=wheel.getBoundingClientRect(),x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2);let a=Math.atan2(y,x)*180/Math.PI+90;if(a<0)a+=360;setVolume((a/360)*100)}
-wheel.addEventListener("pointerdown",e=>{wheelDragging=true;wheel.setPointerCapture(e.pointerId);volumeFromPointer(e)});
-wheel.addEventListener("pointermove",e=>{if(wheelDragging)volumeFromPointer(e)});wheel.addEventListener("pointerup",()=>wheelDragging=false);
+/* =========================
+   PLAYBACK
+========================= */
 
-async function toggleShuffle(){state.shuffle=!state.shuffle;await api("/shuffle",{method:"POST",body:JSON.stringify({enabled:state.shuffle})});document.getElementById("shuffleButton").classList.toggle("active",state.shuffle)}
-async function cycleRepeat(){const modes=["None","Track","Playlist"];let i=(modes.indexOf(state.repeat)+1)%modes.length;state.repeat=modes[i];await api("/repeat",{method:"POST",body:JSON.stringify({mode:state.repeat})});const b=document.getElementById("repeatButton");b.classList.toggle("active",state.repeat!=="None");b.textContent=state.repeat==="Track"?"🔂":"🔁"}
+async function playPause() {
 
-function openDrawer(name){closeDrawers();document.getElementById(name+"Drawer").classList.add("open");document.getElementById("overlay").classList.add("show")}
-function closeDrawers(){document.querySelectorAll(".drawer").forEach(d=>d.classList.remove("open"));document.getElementById("overlay").classList.remove("show")}
-async function testConnection(){const d=await api("/status");alert(d?"Connected to Linux PC!\nSpotify: "+(d.player||"Not detected"):"Could not connect to Linux PC.")}
-function formatTime(s){if(!Number.isFinite(s)||s<0)return"0:00";s=Math.floor(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+    await api(
+        "/playpause",
+        {
+            method: "POST"
+        }
+    );
 
-setInterval(()=>{if(state.playing&&state.duration>0&&!updatingProgress){state.position=Math.min(state.position+.25,state.duration);document.getElementById("progress").value=state.position;document.getElementById("currentTime").textContent=formatTime(state.position)}},250);
-updateStatus();setInterval(updateStatus,2000);
+    setTimeout(
+        updateStatus,
+        150
+    );
+}
 
-if("serviceWorker"in navigator) navigator.serviceWorker.register("./sw.js").catch(console.error);
 
-let deferredInstallPrompt=null;
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById("installBtn").style.display="block"});
-async function installApp(){if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;document.getElementById("installBtn").style.display="none"}
-window.addEventListener("appinstalled",()=>document.getElementById("installBtn").style.display="none");
+async function nextTrack() {
+
+    await api(
+        "/next",
+        {
+            method: "POST"
+        }
+    );
+
+    setTimeout(
+        updateStatus,
+        250
+    );
+}
+
+
+async function previousTrack() {
+
+    await api(
+        "/previous",
+        {
+            method: "POST"
+        }
+    );
+
+    setTimeout(
+        updateStatus,
+        250
+    );
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(
+    position,
+    length
+) {
+
+    if (!length) {
+
+        progressFill.style.width =
+            "0%";
+
+        progressThumb.style.left =
+            "0%";
+
+        currentTime.textContent =
+            "0:00";
+
+        duration.textContent =
+            "0:00";
+
+        return;
+    }
+
+    const percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                (position / length) * 100
+            )
+        );
+
+    progressFill.style.width =
+        percent + "%";
+
+    progressThumb.style.left =
+        percent + "%";
+
+    currentTime.textContent =
+        formatTime(position);
+
+    duration.textContent =
+        formatTime(length);
+}
+
+
+function formatTime(
+    seconds
+) {
+
+    seconds =
+        Math.max(
+            0,
+            Math.floor(seconds)
+        );
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+    const secs =
+        String(
+            seconds % 60
+        ).padStart(
+            2,
+            "0"
+        );
+
+    return `${minutes}:${secs}`;
+}
+
+
+progress.addEventListener(
+    "click",
+    async event => {
+
+        if (
+            !currentStatus ||
+            !currentStatus.length
+        ) {
+            return;
+        }
+
+        const rect =
+            progress.getBoundingClientRect();
+
+        const percentage =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    (event.clientX - rect.left)
+                    / rect.width
+                )
+            );
+
+        const position =
+            percentage *
+            currentStatus.length;
+
+        await api(
+            "/seek",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    position
+                })
+            }
+        );
+
+        updateStatus();
+    }
+);
+
+
+/* =========================
+   VOLUME
+========================= */
+
+volumeSlider.addEventListener(
+    "click",
+    async event => {
+
+        const rect =
+            volumeSlider.getBoundingClientRect();
+
+        const percentage =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    (event.clientX - rect.left)
+                    / rect.width
+                )
+            );
+
+        const volume =
+            percentage * 100;
+
+        volumeFill.style.width =
+            volume + "%";
+
+        await api(
+            "/volume",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    volume
+                })
+            }
+        );
+    }
+);
+
+
+/* =========================
+   SHUFFLE
+========================= */
+
+async function toggleShuffle() {
+
+    shuffleState =
+        !shuffleState;
+
+    await api(
+        "/shuffle",
+        {
+            method: "POST",
+            body: JSON.stringify({
+                enabled:
+                    shuffleState
+            })
+        }
+    );
+
+    document
+        .getElementById("shuffle")
+        .classList.toggle(
+            "active",
+            shuffleState
+        );
+}
+
+
+/* =========================
+   REPEAT
+========================= */
+
+async function toggleRepeat() {
+
+    if (
+        repeatMode === "None"
+    ) {
+
+        repeatMode = "Playlist";
+
+    } else if (
+        repeatMode === "Playlist"
+    ) {
+
+        repeatMode = "Track";
+
+    } else {
+
+        repeatMode = "None";
+    }
+
+    await api(
+        "/repeat",
+        {
+            method: "POST",
+            body: JSON.stringify({
+                mode:
+                    repeatMode
+            })
+        }
+    );
+
+    const button =
+        document.getElementById(
+            "repeat"
+        );
+
+    button.classList.toggle(
+        "active",
+        repeatMode !== "None"
+    );
+}
+
+
+/* =========================
+   DRAWERS
+========================= */
+
+function openDrawer(
+    type
+) {
+
+    const overlay =
+        document.getElementById(
+            "overlay"
+        );
+
+    const queue =
+        document.getElementById(
+            "queueDrawer"
+        );
+
+    const settings =
+        document.getElementById(
+            "settingsDrawer"
+        );
+
+    overlay.classList.add(
+        "open"
+    );
+
+    queue.classList.toggle(
+        "open",
+        type === "queue"
+    );
+
+    settings.classList.toggle(
+        "open",
+        type === "settings"
+    );
+
+    document.getElementById(
+        "serverAddress"
+    ).textContent = PC;
+}
+
+
+function closeDrawers() {
+
+    document
+        .getElementById("overlay")
+        .classList.remove(
+            "open"
+        );
+
+    document
+        .getElementById("queueDrawer")
+        .classList.remove(
+            "open"
+        );
+
+    document
+        .getElementById("settingsDrawer")
+        .classList.remove(
+            "open"
+        );
+}
+
+
+/* =========================
+   PWA INSTALL
+========================= */
+
+window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+
+        event.preventDefault();
+
+        deferredInstallPrompt =
+            event;
+
+        document
+            .getElementById(
+                "installButton"
+            )
+            .classList.add(
+                "show"
+            );
+    }
+);
+
+
+document
+    .getElementById(
+        "installButton"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !deferredInstallPrompt
+            ) {
+                return;
+            }
+
+            deferredInstallPrompt.prompt();
+
+            await deferredInstallPrompt
+                .userChoice;
+
+            deferredInstallPrompt =
+                null;
+
+            document
+                .getElementById(
+                    "installButton"
+                )
+                .classList.remove(
+                    "show"
+                );
+        }
+    );
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if (
+    "serviceWorker" in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register(
+                    "./sw.js"
+                )
+                .catch(
+                    error =>
+                        console.error(
+                            "Service worker:",
+                            error
+                        )
+                );
+        }
+    );
+}
+
+
+/* =========================
+   START
+========================= */
+
+updateStatus();
+
+setInterval(
+    updateStatus,
+    1000
+);
+
 </script>
+
 </body>
 </html>
-'''
-
-manifest = r'''{
-  "name": "Car Thing",
-  "short_name": "Car Thing",
-  "description": "Linux Spotify controller",
-  "start_url": "./",
-  "scope": "./",
-  "display": "fullscreen",
-  "orientation": "landscape",
-  "background_color": "#090909",
-  "theme_color": "#090909",
-  "icons": [
-    {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
-  ]
-}'''
-
-sw = r'''const CACHE = "carthing-v3";
-const STATIC = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
-
-self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(STATIC)));
-  self.skipWaiting();
-});
-
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-    ))
-  );
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", event => {
-  const url = new URL(event.request.url);
-
-  // Never intercept API/tunnel requests.
-  if (url.protocol !== "https:" || url.origin !== self.location.origin) return;
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    fetch(event.request).catch(() =>
-      caches.match(event.request).then(r =>
-        r || new Response("Offline", {status:503, headers:{"Content-Type":"text/plain"}})
-      )
-    )
-  );
-});
-'''
-
-server = r'''from flask import Flask, jsonify, request
-from flask_cors import CORS
-import subprocess
-
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-def run(*args):
-    try:
-        r = subprocess.run(["playerctl", *args], capture_output=True, text=True, timeout=3)
-        return r.stdout.strip() if r.returncode == 0 else None
-    except Exception:
-        return None
-
-def player():
-    players = run("-l") or ""
-    for p in players.splitlines():
-        if "spotify" in p.lower():
-            return p
-    return "spotify"
-
-def cmd(*args):
-    p = player()
-    try:
-        r = subprocess.run(["playerctl", "-p", p, *args], capture_output=True, text=True, timeout=3)
-        return r.returncode == 0
-    except Exception:
-        return False
-
-@app.get("/")
-def root():
-    return jsonify({"name":"Car Thing Linux Controller","status":"online"})
-
-@app.get("/status")
-def status():
-    p = player()
-    length = run("-p",p,"metadata","mpris:length")
-    pos = run("-p",p,"position")
-    vol = run("-p",p,"volume")
-    return jsonify({
-        "player": p,
-        "state": run("-p",p,"status") or "Stopped",
-        "title": run("-p",p,"metadata","title") or "",
-        "artist": run("-p",p,"metadata","artist") or "",
-        "album": run("-p",p,"metadata","album") or "",
-        "art": run("-p",p,"metadata","mpris:artUrl") or "",
-        "length": (int(length)/1000000) if length and length.isdigit() else 0,
-        "position": float(pos) if pos else 0,
-        "volume": (float(vol)*100) if vol else 0
-    })
-
-@app.post("/play")
-def play(): return jsonify(success=cmd("play"))
-@app.post("/pause")
-def pause(): return jsonify(success=cmd("pause"))
-@app.post("/playpause")
-def playpause(): return jsonify(success=cmd("play-pause"))
-@app.post("/next")
-def next_track(): return jsonify(success=cmd("next"))
-@app.post("/previous")
-def previous(): return jsonify(success=cmd("previous"))
-@app.post("/stop")
-def stop(): return jsonify(success=cmd("stop"))
-
-@app.post("/seek")
-def seek():
-    data=request.get_json(silent=True) or {}
-    try: position=float(data.get("position",0))
-    except: position=0
-    return jsonify(success=cmd("position",str(max(0,position))))
-
-@app.post("/volume")
-def volume():
-    data=request.get_json(silent=True) or {}
-    try: value=max(0,min(100,float(data.get("volume",50))))
-    except: value=50
-    return jsonify(success=cmd("volume",str(value/100)),volume=value)
-
-@app.post("/shuffle")
-def shuffle():
-    enabled=bool((request.get_json(silent=True) or {}).get("enabled",False))
-    return jsonify(success=cmd("shuffle","true" if enabled else "false"),shuffle=enabled)
-
-@app.post("/repeat")
-def repeat():
-    mode=(request.get_json(silent=True) or {}).get("mode","None")
-    if mode not in ("None","Track","Playlist"): mode="None"
-    return jsonify(success=cmd("loop",mode),repeat=mode)
-
-if __name__=="__main__":
-    print("Car Thing controller: http://0.0.0.0:8081")
-    app.run(host="0.0.0.0",port=8081,debug=False)
