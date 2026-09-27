@@ -14,13 +14,13 @@
   ],
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/9/99/Opml-icon-128x128.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icon-512.png",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Icon_Pinguin_2_512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
